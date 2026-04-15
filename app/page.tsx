@@ -6,8 +6,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 gsap.registerPlugin(ScrollTrigger)
 
-function splitWords(text) {
-  return text.split(" ").map((word, i) => (
+function splitWords(text: string) {
+  return text.split(" ").map((word: string, i: number) => (
     <span key={i} style={{ display: "inline-block", overflow: "hidden", marginRight: "0.3em" }}>
       <span className="word" style={{ display: "inline-block" }}>{word}</span>
     </span>
@@ -57,15 +57,15 @@ const plans = [
 ]
 
 export default function Home() {
-  const heroRef = useRef(null)
-  const heroSubRef = useRef(null)
-  const heroBtnRef = useRef(null)
-  const featuresRef = useRef(null)
-  const revealRef = useRef(null)
-  const pricingRef = useRef(null)
-  const navRef = useRef(null)
+const heroRef = useRef<HTMLHeadingElement>(null)
+const heroSubRef = useRef<HTMLParagraphElement>(null)
+const heroBtnRef = useRef<HTMLDivElement>(null)
+const featuresRef = useRef<HTMLElement>(null)
+const revealRef = useRef<HTMLParagraphElement>(null)
+const pricingRef = useRef<HTMLDivElement>(null)
+const navRef = useRef<HTMLElement>(null)
 
-  useEffect(() => {
+useEffect(() => {
   const timer = setTimeout(() => {
 
     gsap.from(navRef.current, {
@@ -75,28 +75,30 @@ export default function Home() {
       ease: "power2.out"
     })
 
-    const heroWords = heroRef.current.querySelectorAll(".word")
-    const tl = gsap.timeline()
-    tl.from(heroWords, {
-      y: "100%",
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.07,
-      ease: "power3.out"
-    })
-    .from(heroSubRef.current, {
-      opacity: 0,
-      y: 20,
-      duration: 0.7,
-      ease: "power2.out"
-    }, "-=0.3")
-    .from(heroBtnRef.current, {
-      opacity: 0,
-      y: 20,
-      scale: 0.95,
-      duration: 0.5,
-      ease: "back.out(1.7)"
-    }, "-=0.3")
+    const heroWords = heroRef.current?.querySelectorAll(".word")
+    if (heroWords) {
+      const tl = gsap.timeline()
+      tl.from(heroWords, {
+        y: "100%",
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.07,
+        ease: "power3.out"
+      })
+      .from(heroSubRef.current, {
+        opacity: 0,
+        y: 20,
+        duration: 0.7,
+        ease: "power2.out"
+      }, "-=0.3")
+      .from(heroBtnRef.current, {
+        opacity: 0,
+        y: 20,
+        scale: 0.95,
+        duration: 0.5,
+        ease: "back.out(1.7)"
+      }, "-=0.3")
+    }
 
     const featureCards = document.querySelectorAll(".feature-card")
     gsap.set(featureCards, { opacity: 0, y: 60 })
@@ -113,19 +115,21 @@ export default function Home() {
       ease: "none"
     })
 
-    const revealWords = revealRef.current.querySelectorAll(".word")
-    gsap.from(revealWords, {
-      scrollTrigger: {
-        trigger: revealRef.current,
-        start: "top bottom",
-        end: "top 20%",
-        scrub: true,
-      },
-      opacity: 0.08,
-      y: 30,
-      stagger: 0.04,
-      ease: "none"
-    })
+    const revealWords = revealRef.current?.querySelectorAll(".word")
+    if (revealWords) {
+      gsap.from(revealWords, {
+        scrollTrigger: {
+          trigger: revealRef.current,
+          start: "top bottom",
+          end: "top 20%",
+          scrub: true,
+        },
+        opacity: 0.08,
+        y: 30,
+        stagger: 0.04,
+        ease: "none"
+      })
+    }
 
     const pricingCards = document.querySelectorAll(".pricing-card")
     gsap.set(pricingCards, { opacity: 0, y: 80 })
@@ -144,12 +148,22 @@ export default function Home() {
 
     ScrollTrigger.refresh()
 
+    const timer = setTimeout(() => {
+
+  console.log("1. nav:", navRef.current)
+  console.log("2. hero:", heroRef.current)
+  console.log("3. feature cards:", document.querySelectorAll(".feature-card").length)
+  console.log("4. pricing cards:", document.querySelectorAll(".pricing-card").length)
+  console.log("5. reveal:", revealRef.current)
+
+  // ... resto del código
+}, 100)
+
   }, 100)
 
   return () => clearTimeout(timer)
 
 }, [])
-
   return (
     <main style={{ overflowX: "hidden" }}>
 
